@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .my-button:not(:last-of-type) {
+      margin-right: 10px;
+    }
+
+    .my-input {
+      display: block;
+      width: 200px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .input-login {
+      margin-bottom: 15px;
+    }
+
+    .input-password {
+      margin-right: 30px;
+    }
+
+    .button {
+      background-color: rgb(0, 123, 255);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .password-input-container {
+      display: flex;
+      margin-bottom: 25px;
+    }
+
+    .password-toggle {
+      background: transparent;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 8px;
+    }
+
+    .password-toggle:hover {
+      color: #333;
+    }
+
+    .clock {
+      margin-left: auto;
+      margin-bottom: 15px;
+      padding: 25px;
+      font-size: 25px;
+      font-weight: 400;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="js-container"></div>
+
+  <script src="https://unpkg.com/supersimpledev/react.js"></script>
+  <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+  <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
+
+  <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+  <script type="text/babel">
+
+    function Input({ placeholder, type = 'text', className }) {
+      const [inputText, setInputText] = React.useState('');
+
+      function saveInputText(event) {
+        setInputText(event.target.value);
+      }
+
+      return (
+        <input className={className} type={type} value={inputText} placeholder={placeholder} onChange={saveInputText}></input>
+      );
+    }
+
+    function PasswordInput({ placeholder, className }) {
+      const [showPassword, setShowPassword] = React.useState(false);
+
+      return (
+        <div className="password-input-container">
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder={placeholder}
+            className={className}
+          />
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
+      );
+    };
+
+    function Clock() {
+      const [time, setTime] = React.useState(dayjs().format('HH:mm:ss'));
+
+      React.useEffect(() => {
+        // Function to update time
+        const updateTime = () => {
+          setTime(dayjs().format('HH:mm:ss'));
+
+          // Schedule next update for the next second
+          const now = dayjs();
+          const delay = 1000 - now.millisecond(); // Align to exact second
+          timeoutId = setTimeout(updateTime, delay);
+        };
+
+        // console.log("run code")
+
+        let timeoutId;
+        updateTime(); // Start the updates
+
+        // Cleanup
+        return () => {
+          clearTimeout(timeoutId);
+        };
+      }, []);
+
+      return (
+        <div className="clock">
+          Current Time: {time}
+        </div>
+      )
+    }
+
+    function App() {
+      const [isButtonOn, setButtonOn] = React.useState(true);
+
+      function switchButton(event) {
+        setButtonOn(!isButtonOn);
+      }
+
+      return (
+        <div className="app-container">
+          <h1>Hello, welcome to my website</h1>
+          <Clock></Clock>
+          <Input placeholder="Email" className="input-login my-input"></Input>
+          <PasswordInput placeholder="Password" className="input-password my-input"></PasswordInput>
+          <div className="button-container">
+            <button className="button my-button">Login</button>
+            <button className="button my-button">Sing up</button>
+          </div>
+        </div>
+      );
+    }
+
+    const container = document.querySelector('.js-container');
+    ReactDOM.createRoot(container).render(<App />);
+  </script>
+</body>
+
+</html>

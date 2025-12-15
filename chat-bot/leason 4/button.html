@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Button</title>
+    <style>
+      body {
+        font-family: Arial;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+
+      .button-switch {
+        color: white;
+        padding: 12px 20px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .button-switch-on {
+        background-color: rgb(25, 135, 84);
+      }
+
+      .button-switch-off {
+        background-color: rgb(220, 53, 69);
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="js-container"></div>
+
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
+
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+    <script type="text/babel">
+
+      function App() {
+        const [isButtonOn, setButtonOn] = React.useState(true);
+
+        function switchButton(event) {
+          setButtonOn(!isButtonOn);
+        }
+
+        return (
+          <div className="app-container">
+            <button
+              onClick={switchButton}
+              className={`button-switch ${isButtonOn ? 'button-switch-on' : 'button-switch-off'}`}
+            >
+            {isButtonOn ? 'ON' : 'OFF'}
+            </button>
+          </div>
+        );
+      }
+
+      const container = document.querySelector('.js-container');
+      ReactDOM.createRoot(container).render(<App />);
+    </script>
+  </body>
+</html>
