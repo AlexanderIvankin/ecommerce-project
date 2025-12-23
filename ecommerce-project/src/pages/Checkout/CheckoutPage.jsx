@@ -84,7 +84,7 @@ export function CheckoutPage({ cart }) {
                         </div>
                         {deliveryOptions.map((deliveryOption) => {
                           return (
-                            <div className="delivery-option">
+                            <div key={deliveryOption.id} className="delivery-option">
                               <input
                                 type="radio"
                                 checked={
