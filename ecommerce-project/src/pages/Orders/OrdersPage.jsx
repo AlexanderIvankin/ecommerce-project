@@ -1,18 +1,26 @@
 import axios from "axios";
 import dayjs from "dayjs";
-import { useEffect, useState, Fragment } from "react";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
+import { OrderDetails } from "./OrderDetails";
 import "./OrdersPage.css";
 import { formatMoney } from "../../utils/money";
 
 export function OrdersPage({ cart }) {
   const [orders, setOrders] = useState([]);
 
+  // useEffect(() => {
+  //   axios.get("/api/orders?expand=products").then((response) => {
+  //     setOrders(response.data);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    axios.get("/api/orders?expand=products").then((response) => {
+    const fetchOrdersData = async () => {
+      const response = await axios.get("/api/orders?expand=products");
       setOrders(response.data);
-    });
+    };
+    fetchOrdersData();
   }, []);
 
   return (
@@ -26,7 +34,6 @@ export function OrdersPage({ cart }) {
 
         <div className="orders-grid">
           {orders.map((orderItem) => {
-            console.log(orderItem);
             return (
               <div key={orderItem.id} className="order-container">
                 <div className="order-header">
@@ -47,52 +54,8 @@ export function OrdersPage({ cart }) {
                   </div>
                 </div>
 
-                <div className="order-details-grid">
-                  {orderItem.products.map((productItem) => {
-                    return (
-                      <Fragment key={productItem.productId}>
-                        <div
-                          key={productItem.productId}
-                          className="product-image-container"
-                        >
-                          <img src={productItem.product.image} />
-                        </div>
+                <OrderDetails orderItem={orderItem} />
 
-                        <div className="product-details">
-                          <div className="product-name">
-                            {productItem.product.name}
-                          </div>
-                          <div className="product-delivery-date">
-                            Arriving on:{" "}
-                            {dayjs(productItem.estimatedDeliveryTimeMs).format(
-                              "dddd D"
-                            )}
-                          </div>
-                          <div className="product-quantity">
-                            Quantity: {productItem.quantity}
-                          </div>
-                          <button className="buy-again-button button-primary">
-                            <img
-                              className="buy-again-icon"
-                              src="images/icons/buy-again.png"
-                            />
-                            <span className="buy-again-message">
-                              Add to Cart
-                            </span>
-                          </button>
-                        </div>
-
-                        <div className="product-actions">
-                          <Link to="/tracking">
-                            <button className="track-package-button button-secondary">
-                              Track package
-                            </button>
-                          </Link>
-                        </div>
-                      </Fragment>
-                    );
-                  })}
-                </div>
               </div>
             );
           })}
