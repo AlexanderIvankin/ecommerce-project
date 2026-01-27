@@ -1,13 +1,40 @@
-import { Link } from 'react-router';
+import axios from "axios";
+import { Link } from "react-router";
 import { Header } from "../../components/Header";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { DeliveryProgress } from "./DeliveryProgress";
+import dayjs from "dayjs";
 import "./TrackingPage.css";
 
 export function TrackingPage({ cart }) {
+  const { orderId, productId } = useParams();
+  const [order, setOrder] = useState(null);
+
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      const response = await axios.get(
+        `/api/orders/${orderId}?expand=products`,
+      );
+      setOrder(response.data);
+    };
+
+    fetchOrderData();
+  }, [orderId, productId]);
+
+  const selectedProduct = order?.products?.find((productItem) => {
+    return productItem.productId === productId;
+  });
+
+  if (!order || !selectedProduct) {
+    return null;
+  }
+
   return (
     <>
       <title>Tracking</title>
 
-      <Header cart={cart}/>
+      <Header cart={cart} />
 
       <div className="tracking-page">
         <div className="order-tracking">
@@ -15,28 +42,25 @@ export function TrackingPage({ cart }) {
             View all orders
           </Link>
 
-          <div className="delivery-date">Arriving on Monday, June 13</div>
+          <div className="delivery-date">
+            Arriving on{" "}
+            {dayjs(selectedProduct.estimatedDeliveryTimeMs).format(
+              "dddd, MMMM D",
+            )}
+          </div>
+
+          <div className="product-info">{selectedProduct.product.name}</div>
 
           <div className="product-info">
-            Black and Gray Athletic Cotton Socks - 6 Pairs
+            Quantity: {selectedProduct.quantity}
           </div>
 
-          <div className="product-info">Quantity: 1</div>
+          <img className="product-image" src={selectedProduct.product.image} />
 
-          <img
-            className="product-image"
-            src="images/products/athletic-cotton-socks-6-pairs.jpg"
+          <DeliveryProgress
+            orderTimeMs={order.orderTimeMs}
+            deliveryTimeMs={selectedProduct.estimatedDeliveryTimeMs}
           />
-
-          <div className="progress-labels-container">
-            <div className="progress-label">Preparing</div>
-            <div className="progress-label current-status">Shipped</div>
-            <div className="progress-label">Delivered</div>
-          </div>
-
-          <div className="progress-bar-container">
-            <div className="progress-bar"></div>
-          </div>
         </div>
       </div>
     </>
