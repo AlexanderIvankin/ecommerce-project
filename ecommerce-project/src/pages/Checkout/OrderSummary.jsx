@@ -31,8 +31,6 @@ export function OrderSummary({ cart, deliveryOptions, loadCart }) {
             await loadCart();      
           };
 
-          console.log(cartItem);
-
           return (
             <div key={cartItem.productId} className="cart-item-container">
               <div className="delivery-date">
