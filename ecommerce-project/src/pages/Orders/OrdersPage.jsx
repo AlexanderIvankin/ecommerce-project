@@ -6,7 +6,7 @@ import { OrderDetails } from "./OrderDetails";
 import "./OrdersPage.css";
 import { formatMoney } from "../../utils/money";
 
-export function OrdersPage({ cart }) {
+export function OrdersPage({ cart, loadCart }) {
   const [orders, setOrders] = useState([]);
 
   // useEffect(() => {
@@ -54,7 +54,7 @@ export function OrdersPage({ cart }) {
                   </div>
                 </div>
 
-                <OrderDetails orderItem={orderItem} />
+                <OrderDetails orderItem={orderItem} loadCart={loadCart} />
 
               </div>
             );

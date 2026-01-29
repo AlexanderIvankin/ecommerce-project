@@ -1,7 +1,7 @@
-import { deliveryProgressPercentage } from "../../utils/deliveryProgressPercentage";
+import { deliveryPercentage } from "../../utils/deliveryPercentage";
 
 export function DeliveryProgress({ orderTimeMs, deliveryTimeMs }) {
-  const deliveryProgress = deliveryProgressPercentage(orderTimeMs, deliveryTimeMs);
+  const deliveryProgress = deliveryPercentage(orderTimeMs, deliveryTimeMs);
   let deliveryStatus = "";
 
   if (deliveryProgress < 33) deliveryStatus = "Preparing";

@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import "./CheckoutHeader.css";
-export function CheckoutHeader() {
+export function CheckoutHeader( { paymentSummary }) {
   return (
     <>
       <div className="checkout-header">
@@ -15,7 +15,7 @@ export function CheckoutHeader() {
           <div className="checkout-header-middle-section">
             Checkout (
             <Link className="return-to-home-link" to="/">
-              3 items
+              {paymentSummary ? paymentSummary.totalItems : ''} items
             </Link>
             )
           </div>
