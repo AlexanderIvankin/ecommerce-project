@@ -12,13 +12,12 @@ export function Header({ cart }) {
   const searchProducts = () => {
     navigate(`/?search=${search}`);
   };
-  
-  const handleSearchKeyDown = (event) => {
-  if (event.key === 'Enter') {
-    searchProducts();
-  }
-};
 
+  const handleSearchKeyDown = (event) => {
+    if (event.key === "Enter") {
+      searchProducts();
+    }
+  };
 
   let totalQuantity = 0;
 
